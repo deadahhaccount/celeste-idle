@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+        <title>Celeste gameing</title>
+        <style>
+            body{
+    background-color: rgb(231, 183, 183);
+}
+p,h2,h3{
+    font-family: 'Roboto','Arial';
+    color:rgb(255, 255, 255);
+}
+button{
+    background-color: rgb(235, 128, 128);
+    cursor:pointer;
+    border-color:rgb(186, 105, 105);
+    border-style:solid;
+    border-width:3px;
+    border-radius:5px;
+}
+.strawberry{
+    width:150px;
+}
+.strawberry-button{
+    padding: 0;
+    border:0;
+    background-color:transparent;
+    cursor: pointer;
+    transition: transform 0.15s;
+}
+.strawberry-container{
+    display: grid;
+    place-items: center;
+}
+.strawberry-button:hover{
+    transform: scale(1.1);
+}
+.strawberry-button:active{
+    transform: scale(1.05);
+}
+.amount-collected-container{
+    display: grid;
+    place-items: center;
+}
+.prestige-level{
+    text-align: center;
+}
+.strawb{
+    margin:0;
+    word-wrap: break-word;
+  word-break: break-all;
+}
+.game-container{
+    display:flex;
+}
+.left-div,.right-div,.middle-div{
+    flex:1;
+    display:inline-block;
+}
+.right-div{
+    margin-left: 4px;
+}
+.menu-button,.prestige,.prestige-button,.reset{
+    height:75px;
+    padding:10px;
+    width:100%;
+    text-align: left;
+    display:block;
+    transition:opacity 0.15s;
+}
+.menu-button:hover,.prestige:hover,.yes:hover,.no:hover,.menu-menu:hover,.prestige-menu:hover,.prestige-button:hover,.reset:hover{
+    opacity: 0.75;
+}
+.menu-button:active,.prestige:active,.yes:active,.no:active,.menu-menu:active,.prestige-menu:active,.prestige-button:active,.reset:active{
+    opacity: 0.5;
+}
+.details-container{
+    display:inline-block;
+}
+.menu{
+    overflow: scroll;
+}
+.prestige{
+    text-align: center;
+    color:white;
+    font-family: 'Roboto','Arial';
+    font-size: 25px;
+}
+.dark{
+    position: absolute;
+    display: grid;
+    width:100%;
+    height:150%;
+    background-color: black;
+    top:0px;
+    left:0px;
+    opacity: 0;
+    z-index: -1;
+    place-items: center;
+}
+.confirm{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top:25%;
+    width: 200px;
+    height:170px;
+    background-color: rgb(226, 141, 141);
+    border-color:rgb(186, 105, 105);
+    border-style:solid;
+    border-width:3px;
+    border-radius:5px;
+}
+.warning{
+    text-align: center;
+}
+.yes,.no,.yes-reset{
+    width: 42%;
+    position: absolute;
+}
+.yes,.yes-reset{
+    left:10px;
+    bottom:5%
+}
+.no{
+    right:10px;
+    bottom:5%
+}
+.swap-menu{
+    width:100%;
+    height:50px;
+    display: flex;
+}
+.menu-menu,.prestige-menu,.reset{
+    flex:1;
+    height:100%;
+    font-family: 'Roboto','Arial';
+    color:white;
+    font-weight: bold;
+    font-size: 20px;
+}
+.reset{
+    height:100px;
+    text-align: center;
+    font-size: 25px;
+}
+        </style>
+    </head>
+    <body>
+            <div class="game-container">
+                <div class="left-div">
+                    <div class="amount-collected-container">
+                    <h2 class="strawb">Strawberries collected: </h2>
+                    <h3 class="SPS">Strawberries per second:0</h3>
+                    </div>
+                    <div class="strawberry-container">
+                    <button class="strawberry-button">
+                        <img class="strawberry" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQDf1PLajLqofaYkGixUxAR9drwIk21jFH4Lw&s">
+                    </button>
+                    </div>
+                    <h3 class="prestige-level">Prestige Level:0</h3>
+                    <button class="reset">Reset</button>
+                </div>
+                <div class="middle-div">
+                <div>
+                    <button class="prestige">Prestige</button>
+                </div>
+                </div>
+                <div class="right-div">
+                    <div class="swap-menu"> <button class="menu-menu">Shop</button> <button class="prestige-menu">Prestige</button></div>
+                    <div class="menu"></div>
+                </div>
+            </div>
+            <div class="dark">
+                <div class="confirm">
+                    <p class="warning"></p>
+                    <button class="yes">Yes</button>
+                    <button class="yes-reset">Yes</button>
+                    <button class="no">No</button>
+                </div>
+            </div>
+        <script>
+            //Game Data
+
+const celesteData = [
+  {
+    name: "Madeline",
+    cost: 15,
+    amount: 0,
+    SPS: 0.5
+  },
+  {
+    name: "Badeline",
+    cost: 100,
+    amount: 0,
+    SPS: 2
+  },
+  {
+    name: "Granny",
+    cost: 1100,
+    amount: 0,
+    SPS: 150
+  },
+  {
+    name: "Theo",
+    cost: 12000,
+    amount: 0,
+    SPS: 1000
+  },
+  {
+    name: "Bird",
+    cost: 100000,
+    amount: 0,
+    SPS: 5000
+  },
+  {
+    name: "Heart",
+    cost: 1000000,
+    amount: 0,
+    SPS: 50000
+  },
+  {
+    name: "A-Side",
+    cost: 20000000,
+    amount: 0,
+    SPS: 200000
+  },
+  {
+    name: "B-Side",
+    cost: 350000000,
+    amount: 0,
+    SPS: 2500000
+  },
+  {
+    name: "C-Side",
+    cost: 5000000000,
+    amount: 0,
+    SPS: 25000000
+  },
+  {
+    name: "D-Side",
+    cost: 75000000000,
+    amount: 0,
+    SPS: 50000000
+  },
+  {
+    name: "Grandmaster",
+    cost: 1000000000000,
+    amount: 0,
+    SPS: 5000000000
+  },
+  {
+    name: "Cracked",
+    cost: 15000000000000,
+    amount: 0,
+    SPS: 25000000000
+  },
+  {
+    name: "You",
+    cost: 200000000000000,
+    amount: 0,
+    SPS: 300000000000
+  },
+  {
+    name: "Maddy",
+    cost: 2000000000000000,
+    amount: 0,
+    SPS: 1000000000000
+  }
+];
+
+
+
+const prestigeData = [
+  {
+    name: "Click-Power",
+    cost: 1,
+    desc: "Doubles clicking power",
+    amount: 0
+  },
+  {
+    name: "Madeline-Power",
+    cost: 2,
+    desc: "Doubles Madeline's SPS",
+    amount: 0
+  },
+  {
+    name: "Badeline-Power",
+    cost: 5,
+    desc: "Doubles Badeline's SPS",
+    amount: 0
+  },
+  {
+    name: "Granny-Power",
+    cost: 10,
+    desc: "Doubles Granny's SPS",
+    amount: 0
+  },
+  {
+    name: "Theo-Power",
+    cost: 25,
+    desc: "Doubles Theo's SPS",
+    amount: 0
+  },
+  {
+    name: "Bird-Power",
+    cost: 50,
+    desc: "Doubles Birs's SPS",
+    amount: 0
+  },
+  {
+    name: "Heart-Power",
+    cost: 100,
+    desc: "Doubles Crystal Heart's SPS",
+    amount: 0
+  },
+  {
+    name: "A-Side-Power",
+    cost: 500,
+    desc: "Doubles A-Side's SPS",
+    amount: 0
+  },
+  {
+    name: "B-Side-Power",
+    cost: 1000,
+    desc: "Doubles B-Side's SPS",
+    amount: 0
+  },
+  {
+    name: "C-Side-Power",
+    cost: 5000,
+    desc: "Doubles C-Side's SPS",
+    amount: 0
+  },
+  {
+    name: "D-Side-Power",
+    cost: 10000,
+    desc: "Doubles D-Side's SPS",
+    amount: 0
+  },
+  {
+    name: "Grandmaster-Power",
+    cost: 50000,
+    desc: "Doubles Grandmaster's SPS",
+    amount: 0
+  },
+  {
+    name: "Cracked-Power",
+    cost: 100000,
+    desc: "Doubles Cracked's SPS",
+    amount: 0
+  },
+  {
+    name: "You-Power",
+    cost: 500000,
+    desc: "Doubles the you's SPS",
+    amount: 0
+  },
+  {
+    name: "Maddy-Power",
+    cost: 1000000,
+    desc: "Doubles Maddy Thorson's SPS",
+    amount: 0
+  }
+];
+let prestigePurchased = JSON.parse(localStorage.getItem("pres")) || [];
+function saveToPrestige(){
+  localStorage.setItem('pres',JSON.stringify(prestigePurchased));
+}
+
+function searchPrestige(thing) {
+  prestigeData.forEach((item) => {
+    if (thing === item.name) {
+      matchingThing = item;
+    }
+  });
+  return matchingThing;
+}
+
+function purchasePrestige(itemName){
+  let matchingItem;
+  const searchedThing=searchPrestige(itemName);
+  console.log(searchedThing);
+  prestigePurchased.forEach((item)=>{
+    if(itemName === item.name){
+      matchingItem=item;
+    }
+  });
+  if(matchingItem){
+    matchingItem.amount++;
+    matchingItem.cost = Math.round(matchingItem.cost * 2.5);
+  }else{
+    prestigePurchased.push({
+      name:itemName,
+      amount:1,
+      cost:Math.round(searchedThing.cost*2.5),
+      desc:searchedThing.desc
+    })
+  }
+  saveToPrestige();
+}
+
+function searchPrestigePurchased(itemName){
+  let matchingItem;
+  console.log(prestigePurchased);
+  prestigePurchased.forEach((item) => {
+    if (itemName === item.name) {
+      matchingItem = item;
+    }
+  });
+  return matchingItem;
+}
+
+//Data Searching
+
+let matchingThing;
+let itemsPurchased = JSON.parse(localStorage.getItem("item")) || [];
+
+function searchThing(thing) {
+  celesteData.forEach((item) => {
+    if (thing === item.name) {
+      matchingThing = item;
+    }
+  });
+  return matchingThing;
+}
+
+function purchaseItem(itemName) {
+  let matchingItem;
+  const searchedThing = searchThing(itemName);
+  console.log(searchedThing);
+  itemsPurchased.forEach((item) => {
+    if (itemName === item.name) {
+      matchingItem = item;
+    }
+  });
+  let prestigeLevel=searchPrestigePurchased(itemName+'-Power');
+  console.log(prestigeLevel)
+    let prestigeMult=1;
+    console.log(Boolean(prestigeLevel));
+    if(prestigeLevel){
+      prestigeMult=2**(prestigeLevel.amount);
+    }
+    console.log(prestigeMult);
+  if (matchingItem) {
+    matchingItem.amount++;
+    matchingItem.SPS = matchingThing.SPS*matchingItem.amount*prestigeMult;
+    matchingItem.cost = Math.round(matchingItem.cost * 1.15);
+  } else {
+    itemsPurchased.push({
+      name: itemName,
+      amount: 1,
+      SPS: searchedThing.SPS*prestigeMult,
+      cost: Math.round(searchedThing.cost * 1.15)
+    });
+  }
+  saveToStorage();
+}
+function searchPurchased(itemName) {
+  let matchingItem;
+  console.log(itemsPurchased);
+  itemsPurchased.forEach((item) => {
+    if (itemName === item.name) {
+      matchingItem = item;
+    }
+  });
+  return matchingItem;
+}
+
+function saveToStorage() {
+  localStorage.setItem("item", JSON.stringify(itemsPurchased));
+}
+
+function calcSPS() {
+  let totalSPS = 0;
+  itemsPurchased.forEach((item) => {
+    totalSPS += item.SPS;
+  });
+  return totalSPS;
+}
+
+console.log(celesteData);
+
+//Shop
+
+function renderMenu() {
+  let menuHTML = ``;
+  celesteData.forEach((element) => {
+    menuHTML += `
+    <button class="menu-button menu-button-${element.name}" data-button-title=${element.name}>
+    <div class="details-container">
+        <p class="button-name">${element.name}</p>
+        <p class="button-details js-details-${element.name}" data-button-details=${element.name}>Amount:${element.amount} SPS:${element.SPS} Cost:${element.cost} strawberries</p>
+    </div>
+    </button>
+`;
+  });
+  document.querySelector(".menu").innerHTML = menuHTML;
+}
+renderMenu();
+const clickPrestige=searchPrestigePurchased('Click-Power');
+let clickingPower = 1;
+if(clickPrestige){
+  clickingPower=2**clickPrestige.amount;
+}
+
+let strawbButton = document.querySelector(".strawberry-button");
+let strawberriesCollected = Number(localStorage.getItem("straw")) || 0;
+let prestigeLevel = Number(localStorage.getItem("prestige")) || 0;
+let strawberriesNeededToPrestige =
+  Number(localStorage.getItem("strawb-needed")) || 100000000;
+  document.querySelector(
+    ".prestige-level"
+  ).innerHTML = `Prestige Level: ${prestigeLevel}`;
+document.querySelector(
+  ".strawb"
+).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+
+strawbButton.addEventListener("click", () => {
+  const clickPrestige=searchPrestigePurchased('Click-Power');
+let clickingPower = 1;
+if(clickPrestige){
+  clickingPower=2**clickPrestige.amount;
+}
+  strawberriesCollected += clickingPower;
+  document.querySelector(
+    ".strawb"
+  ).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+  localStorage.setItem("straw", strawberriesCollected);
+});
+
+let totalSPS = calcSPS();
+document.querySelector(
+  ".SPS"
+).innerHTML = `Strawberries per second:${totalSPS}`;
+
+document.querySelectorAll(".menu-button").forEach((button) => {
+  const buttonName = button.dataset.buttonTitle;
+  console.log(buttonName);
+  let currentCost = searchThing(buttonName).cost;
+  button.addEventListener("click", () => {
+    if (currentCost <= strawberriesCollected) {
+      console.log("test");
+      purchaseItem(buttonName);
+      itemsPurchased.forEach((item) => {
+        document.querySelector(
+          `.js-details-${item.name}`
+        ).innerHTML = `Amount:${item.amount} SPS:${item.SPS} Cost:${item.cost} strawberries`;
+      });
+      strawberriesCollected -= currentCost;
+      document.querySelector(
+        ".strawb"
+      ).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+      currentCost = searchPurchased(buttonName).cost;
+      console.log(currentCost);
+      totalSPS = calcSPS();
+      document.querySelector(
+        ".SPS"
+      ).innerHTML = `Strawberries per second:${totalSPS}`;
+    }
+  });
+});
+itemsPurchased.forEach((item) => {
+  document.querySelector(
+    `.js-details-${item.name}`
+  ).innerHTML = `Amount:${item.amount} SPS:${item.SPS} Cost:${item.cost} strawberries`;
+});
+
+setInterval(() => {
+  strawberriesCollected += totalSPS / 100;
+  document.querySelector(
+    ".strawb"
+  ).innerHTML = `Strawberries collected: ${strawberriesCollected.toFixed(0)}`;
+}, 10);
+setInterval(() => {
+  setTimeout(() => {
+    document.title = `${strawberriesCollected.toFixed(0)} strawberries`;
+  }, 2500);
+  document.title = `Celeste gameing`;
+}, 5000);
+document.querySelector(
+  ".prestige-level"
+).innerHTML = `Prestige Level: ${prestigeLevel}`;
+
+
+//Prestige
+document.querySelectorAll(".prestige-button").forEach((button) => {
+  const prestigeName = button.dataset.prestigeTitle;
+  console.log(prestigeName);
+  let currentCost;
+  if(searchPrestigePurchased(prestigeName)){
+    currentCost = searchPrestigePurchased(prestigeName).cost;
+  }else{
+    currentCost = searchPrestige(prestigeName).cost;
+  }
+  button.addEventListener("click", () => {
+    if (currentCost <= prestigeLevel) {
+      console.log("test");
+      purchasePrestige(prestigeName);
+      prestigePurchased.forEach((item) => {
+        document.querySelector(
+          `.js-prestige-details-${item.name}`
+        ).innerHTML = `Amount:${item.amount} Desc:${item.desc} Cost:${item.cost} prestige`;
+      });
+      prestigeLevel -= currentCost;
+      document.querySelector(
+        ".prestige-level"
+      ).innerHTML = `Prestige Level: ${prestigeLevel}`;
+      currentCost = searchPrestigePurchased(prestigeName).cost;
+      console.log(currentCost);
+      totalSPS = calcSPS();
+      document.querySelector(
+        ".SPS"
+      ).innerHTML = `Strawberries per second:${totalSPS}`;
+    }
+  })
+});
+document.querySelector(".reset").addEventListener("click", () => {
+  document.querySelector('.yes-reset').style.zIndex='10';
+  document.querySelector('.yes').style.zIndex='0';
+  document.querySelector(".dark").style.opacity = "0.6";
+  document.querySelector(".dark").style.zIndex = "1";
+  document.querySelector('.dark').style.transition='opacity 0.6s';
+  document.querySelector(
+    ".warning"
+  ).innerHTML = `Reseting will permanently delete all prestige levels as well as the strawberries and items purchase. Are you REALLY sure?`;
+});
+document.querySelector('.yes-reset').addEventListener('click',()=>{
+  document.querySelector(".dark").style.opacity = "0";
+  document.querySelector(".dark").style.zIndex = "-1";
+  document.querySelector('.dark').style.transition='opacity 0s';
+  localStorage.removeItem("straw");
+  itemsPurchased = [];
+  saveToStorage();
+  console.log(itemsPurchased);
+  strawberriesCollected = 0;
+  totalSPS = 0;
+  localStorage.removeItem('prestige');
+  localStorage.removeItem('strawb-needed');
+  strawberriesNeededToPrestige=100000000;
+  prestigeLevel=0;
+  document.querySelector(
+    ".SPS"
+  ).innerHTML = `Strawberries per second:${totalSPS}`;
+  document.querySelector(
+    ".strawb"
+  ).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+  document.querySelector(
+    ".prestige-level"
+  ).innerHTML = `Prestige Level: ${prestigeLevel}`;
+  renderMenu();
+});
+document.querySelector(".prestige").addEventListener("click", () => {
+  document.querySelector('.yes').style.zIndex='10';
+  document.querySelector('.yes-reset').style.zIndex='0';
+  document.querySelector(".dark").style.opacity = "0.6";
+  document.querySelector(".dark").style.zIndex = "1";
+  document.querySelector('.dark').style.transition='opacity 0.6s';
+  document.querySelector(
+    ".warning"
+  ).innerHTML = `Prestiging will require ${strawberriesNeededToPrestige} strawberries and will increase 5% every next level. Do you wish to continue?`;
+});
+document.querySelector(".yes").addEventListener("click", () => {
+  document.querySelector(".dark").style.opacity = "0";
+  document.querySelector(".dark").style.zIndex = "-1";
+  document.querySelector('.dark').style.transition='opacity 0s';
+  localStorage.removeItem("straw");
+  itemsPurchased = [];
+  saveToStorage();
+  console.log(itemsPurchased);
+  let prestigeStrawberries = strawberriesCollected;
+  strawberriesCollected = 0;
+  totalSPS = 0;
+  document.querySelector(
+    ".SPS"
+  ).innerHTML = `Strawberries per second:${totalSPS}`;
+  document.querySelector(
+    ".strawb"
+  ).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+  renderMenu();
+  while (prestigeStrawberries > 0) {
+    prestigeStrawberries -= strawberriesNeededToPrestige;
+    if (prestigeStrawberries < 0) {
+      break;
+    }
+    prestigeLevel++;
+    strawberriesNeededToPrestige *=1.05;
+    strawberriesNeededToPrestige = strawberriesNeededToPrestige.toFixed(0);
+    localStorage.setItem("strawb-needed", strawberriesNeededToPrestige);
+    localStorage.setItem("prestige", prestigeLevel);
+    document.querySelector(
+      ".prestige-level"
+    ).innerHTML = `Prestige Level: ${prestigeLevel}`;
+  }
+  window.location.reload();
+});
+document.querySelector(".no").addEventListener("click", () => {
+  document.querySelector(".dark").style.zIndex = "-1";
+  document.querySelector(".dark").style.opacity = "0";
+  document.querySelector('.dark').style.transition='opacity 0s';
+});
+
+function renderPrestigeMenu() {
+  let prestigeHTML = ``;
+  prestigeData.forEach((element) => {
+    prestigeHTML += `
+    <button class="prestige-button prestige-button-${element.name}" data-prestige-title=${element.name}>
+    <div class="details-container">
+        <p class="prestige-name">${element.name}</p>
+        <p class="prestige-details js-prestige-details-${element.name}" data-prestige-details=${element.name}>Amount:${element.amount} Description:${element.desc} Cost:${element.cost} prestige</p>
+    </div>
+    </button>
+`;
+  });
+  document.querySelector(".menu").innerHTML = prestigeHTML;
+}
+document.querySelector(".prestige-menu").addEventListener("click", () => {
+  renderPrestigeMenu();
+  console.log("acc kill me");
+  document.querySelectorAll(".prestige-button").forEach((button) => {
+    const prestigeName = button.dataset.prestigeTitle;
+    console.log(prestigeName);
+    let currentCost;
+  if(searchPrestigePurchased(prestigeName)){
+    currentCost = searchPrestigePurchased(prestigeName).cost;
+  }else{
+    currentCost = searchPrestige(prestigeName).cost;
+  }
+    console.log(currentCost)
+    button.addEventListener("click", () => {
+      if (currentCost <= prestigeLevel) {
+        console.log("test");
+        purchasePrestige(prestigeName);
+        prestigePurchased.forEach((item) => {
+          document.querySelector(
+            `.js-prestige-details-${item.name}`
+          ).innerHTML = `Amount:${item.amount} Desc:${item.desc} Cost:${item.cost} prestige`;
+        });
+        prestigeLevel -= currentCost;
+        document.querySelector(
+          ".prestige-level"
+        ).innerHTML = `Prestige Level: ${prestigeLevel}`;
+        currentCost = searchPrestigePurchased(prestigeName).cost;
+        console.log(currentCost);
+        totalSPS = calcSPS();
+        document.querySelector(
+          ".SPS"
+        ).innerHTML = `Strawberries per second:${totalSPS}`;
+      }
+    });
+  });
+  prestigePurchased.forEach((item) => {
+    document.querySelector(
+      `.js-prestige-details-${item.name}`
+    ).innerHTML = `Amount:${item.amount} Desc:${item.desc} Cost:${item.cost} prestige`;
+  });
+});
+document.querySelector(".menu-menu").addEventListener("click", () => {
+  renderMenu();
+  console.log("why");
+  document.querySelectorAll(".menu-button").forEach((button) => {
+    const buttonName = button.dataset.buttonTitle;
+    console.log(buttonName);
+    let currentCost = searchThing(buttonName).cost;
+    button.addEventListener("click", () => {
+      if (currentCost <= strawberriesCollected) {
+        console.log("test");
+        purchaseItem(buttonName);
+        itemsPurchased.forEach((item) => {
+          document.querySelector(
+            `.js-details-${item.name}`
+          ).innerHTML = `Amount:${item.amount} SPS:${item.SPS} Cost:${item.cost} strawberries`;
+        });
+        strawberriesCollected -= currentCost;
+        document.querySelector(
+          ".strawb"
+        ).innerHTML = `Strawberries collected: ${strawberriesCollected}`;
+        currentCost = searchPurchased(buttonName).cost;
+        console.log(currentCost);
+        totalSPS = calcSPS();
+        document.querySelector(
+          ".SPS"
+        ).innerHTML = `Strawberries per second:${totalSPS}`;
+      }
+    });
+  });
+  itemsPurchased.forEach((item) => {
+    document.querySelector(
+      `.js-details-${item.name}`
+    ).innerHTML = `Amount:${item.amount} SPS:${item.SPS} Cost:${item.cost} strawberries`;
+  });
+});
+
+//Genuinely some of the worst code I've made
+//I don't know why changing some things that are inconsequential to other parts makes the other parts break
+//I'm so fucking tired :3
+//Hours wasted=50
+        </script>
+    </body>
+</html>
